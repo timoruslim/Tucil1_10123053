@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 class Block extends ArrayList<ArrayList<Character>> {
     
@@ -47,7 +48,7 @@ class Block extends ArrayList<ArrayList<Character>> {
     public Block reflectBlock() { // reflect about y-axis
         Block reflectedBlock = new Block();
         int rows = this.size();
-        
+
         for (int i = 0; i < rows; i++) {
             reflectedBlock.add(new ArrayList<>());
             for (char letter : this.get(i)) {
@@ -56,6 +57,19 @@ class Block extends ArrayList<ArrayList<Character>> {
         }
         
         return reflectedBlock;
+    }
+
+    public HashSet<Block> permuteBlock() {
+        HashSet<Block> permutations = new HashSet<>();
+
+        Block block = this;
+        for (int i = 0; i < 4; i++) {
+            block = block.rotateBlock();
+            permutations.add(block);
+            permutations.add(block.reflectBlock());
+        }
+        
+        return permutations;
     }
 
     public Block padBlock() {
@@ -75,6 +89,17 @@ class Block extends ArrayList<ArrayList<Character>> {
             maxWidth = Math.max(maxWidth, row.size());          
         }
         return maxWidth;
+    }
+
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        for (ArrayList<Character> row : this) {
+            for (Character letter : row) {
+                string.append(letter);
+            }
+            string.append(' ');
+        }
+        return string.toString();
     }
 }
 
@@ -122,6 +147,13 @@ public class App {
             System.out.print(n + " ");
         }
         System.out.println();
+    }
+
+    static void printList(ArrayList<Block> list) {
+        for (Block b : list) {
+            b.displayBlock();
+            System.out.println();
+        }
     }
 
     static int[] toInt(String[] list) {
@@ -172,16 +204,16 @@ public class App {
         blocks.add(block);
         fileScanner.close();
         
+        // Permute all Pieces
+        ArrayList<Block> possibleBlocks = new ArrayList<>();
         for (Block b : blocks) {
-            b.displayBlock();
-            print();
-            b.rotateBlock().displayBlock();
-            print();
-            b.reflectBlock().displayBlock();
-            print();
+            HashSet<Block> perms = b.permuteBlock();
+            for (Block perm : perms) {
+                possibleBlocks.add(perm);
+            }
         }
-
-        board.displayBoard();
-
+        
+        
+        
     }
 }
