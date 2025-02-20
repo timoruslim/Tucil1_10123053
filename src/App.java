@@ -3,179 +3,10 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-class Block extends ArrayList<ArrayList<Character>> {
-    
-    public Block() { 
-        super(); 
-    }
-
-    public void addRow(char[] row) {
-        ArrayList<Character> rowList = new ArrayList<>();
-        for (char letter : row) {
-            rowList.add(letter);
-        }
-        this.add(rowList);
-        this.padBlock();
-    }
-
-    public void displayBlock() {
-        for (ArrayList<Character> row : this) {
-            for (Character letter : row) {
-                System.out.print(letter + " ");
-            }
-            System.out.println();
-        }
-    }
-    
-    public Block rotateBlock() { // rotate 90 degrees clockwise
-        Block rotatedBlock = new Block();
-        int rows = width();
-        int cols = this.size();
-
-        for (int i = 0; i < rows; i++) {
-            rotatedBlock.add(new ArrayList<>());
-        }
-        for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
-                char letter = this.get(i).get(j);
-                rotatedBlock.get(j).add(0, letter);  
-            }
-        }
-        
-        return rotatedBlock;
-    }
-
-    public Block reflectBlock() { // reflect about y-axis
-        Block reflectedBlock = new Block();
-        int rows = this.size();
-
-        for (int i = 0; i < rows; i++) {
-            reflectedBlock.add(new ArrayList<>());
-            for (char letter : this.get(i)) {
-                reflectedBlock.get(i).add(0, letter);  
-            }
-        }
-        
-        return reflectedBlock;
-    }
-
-    public HashSet<Block> permuteBlock() {
-        HashSet<Block> permutations = new HashSet<>();
-
-        Block block = this;
-        for (int i = 0; i < 4; i++) {
-            block = block.rotateBlock();
-            permutations.add(block);
-            permutations.add(block.reflectBlock());
-        }
-        
-        return permutations;
-    }
-
-    public Block padBlock() {
-        Block paddedBlock = new Block();
-        int maxWidth = width();
-        for (ArrayList<Character> row : this) {
-            while (row.size() < maxWidth) {
-                row.add('·');
-            }
-        }
-        return paddedBlock;
-    }
-    
-    public int width() {
-        int maxWidth = 0;
-        for (ArrayList<Character> row : this) {
-            maxWidth = Math.max(maxWidth, row.size());          
-        }
-        return maxWidth;
-    }
-
-    public String toString() {
-        StringBuilder string = new StringBuilder();
-        for (ArrayList<Character> row : this) {
-            for (Character letter : row) {
-                string.append(letter);
-            }
-            string.append(' ');
-        }
-        return string.toString();
-    }
-}
-
-class Board extends ArrayList<ArrayList<Character>> {
-
-    int n, m;
-
-    public Board(int n, int m) { 
-        super(); 
-        this.n = n;
-        this.m = m;
-
-        for (int i = 0; i < n; i++) {
-            ArrayList<Character> row = new ArrayList<>();
-            for (int j = 0; j < m; j++) {
-                row.add('·');
-            }
-            this.add(row);
-        }
-    }
-
-    public void displayBoard() {
-        for (ArrayList<Character> row : this) {
-            for (char dot : row) {
-                System.out.print(dot);
-            }
-            System.out.println();
-        }
-    }
-
-    public boolean canPlaceBlock(Block block, int x, int y) {
-        int row = block.size();
-        int col = block.get(0).size();
-        
-        for (int i = x; i < row; i++) {
-            for (int j = y; j < col; j++) {
-                if (block.get(i - x).get(j - y) != '·' && this.get(i).get(j) != '·') {
-                    return false;
-                } 
-            }
-        }
-        return true;
-    }
-    
-    public Board placeBlock(Block block, int x, int y) {
-        Board newBoard = this;
-        int row = block.size();
-        int col = block.get(0).size();
-        char letter = block.get(0).get(0);
-        
-        for (int i = x; i < row; i++) {
-            for (int j = y; j < col; j++) {
-                if (block.get(i - x).get(j - y) != '.') {
-                    newBoard.get(i).set(j, letter);
-                } else {
-
-                }
-            }
-        }
-        return newBoard;
-    }
-
-    public boolean solveBoard() {
-        return true;
-    }
-
-}
-
 public class App {
 
-    static void print(String string) {
-        System.out.println(string);
-    }
-
-    static void print(int integer) {
-        System.out.println(integer);
+    static void print(Object thing) {
+        System.out.println(thing);
     }
 
     static void print() {
@@ -252,6 +83,8 @@ public class App {
                 possibleBlocks.add(perm);
             }
         }
+        
+        
 
     }
 }
