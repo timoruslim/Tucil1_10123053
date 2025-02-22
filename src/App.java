@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class App {
 
+    // ez print
     static void print(Object thing) {
         System.out.println(thing);
         System.out.println();
@@ -20,6 +21,7 @@ public class App {
         return intList;
     }
 
+    // get letter representing block
     static char findId(char[] row) {
         for (char letter : row) {
             if (letter != ' ') {
@@ -29,11 +31,12 @@ public class App {
         return ' ';
     }
 
+    // file name without extension
     static String getName(File file) {
         String name = file.getName();
         int pos = name.lastIndexOf(".");
         if (pos > 0) {
-            name = name.substring(0, pos);
+            name = name.substring(0, pos); // cut extension
         }
         return name;
     }
@@ -42,8 +45,8 @@ public class App {
 
         // Get File
         Scanner terminalScanner = new Scanner(System.in);
-        /* System.out.print("Enter file path: ");
-        String path = terminalScanner.nextLine( ); */
+        // System.out.print("Enter file path: ");
+        // String path = terminalScanner.nextLine( ); 
         String path = "../test/Problem_1.txt";
 
         // Read file 
@@ -57,25 +60,31 @@ public class App {
 
         // Get the Pieces 
         ArrayList<Block> blocks = new ArrayList<>();
-        char[] row = fileScanner.nextLine().toCharArray();
-        Block block = new Block(findId(row));
-        block.addRow(row);
+        Block block = null;
+        
         while (fileScanner.hasNextLine()) {
-            char[] newRow = fileScanner.nextLine().toCharArray();  
-            char letter = findId(newRow);
+            char[] row = fileScanner.nextLine().toCharArray();  
+            char letter = findId(row);
 
-            if (block.id != letter) {
-                block.permutations = block.permuteBlock();
-                blocks.add(block);
+            if (block == null || block.id != letter) {
+                if (block != null) {
+                    block.permutations = block.permuteBlock();
+                    blocks.add(block);
+                }
                 block = new Block(letter);
-                row = newRow;
             }
             
-            block.addRow(newRow);
+            block.addRow(row);
         }
-        blocks.add(block);
-        fileScanner.close();
+        
+        // Last Row
+        if (block != null) {
+            block.permutations = block.permuteBlock();
+            blocks.add(block);
+        }
 
+        fileScanner.close();
+        
         // Solve Puzzle
         long start = System.nanoTime(); 
         if (board.solveBoard(blocks)) {
@@ -93,8 +102,7 @@ public class App {
         System.out.print("Apakah anda ingin menyimpan solusi? (ya/tidak) ");
         String answer = terminalScanner.nextLine();
         if (answer.equals("ya")) {
-            String solutionPath = "../test/" + file.getName() + "_Solution.txt";
-            File solution = new File(solutionPath);
+            File solution = new File("../test/" + getName(file) + "_Solution.txt");
             PrintWriter solutionWriter = new PrintWriter(new FileWriter(solution));
             for (ArrayList<Character> r : board) {
                 for (char c : r) {
@@ -106,7 +114,7 @@ public class App {
             solutionWriter.print("\nBanyak kasus yang ditinjau: " + board.cases);
             solutionWriter.close();
         }
-        
+
         // End Program
         terminalScanner.close();
         

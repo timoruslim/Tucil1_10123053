@@ -1,13 +1,18 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class Board extends ArrayList<ArrayList<Character>> {
 
+    // Board properties
     int n, m, p;
     String type;
+
+    // Algorithm stuff
     int cases = 0;
+    HashSet<String> failedStates = new HashSet<>();
 
     public Board(int n, int m, int p, String type) { 
         super(); 
@@ -29,7 +34,7 @@ public class Board extends ArrayList<ArrayList<Character>> {
 
         // Possible 26 Colors
         String RESET = "\u001B[0m";
-        String[] rainbowColors = {
+        String[] rainbow = {
             "\u001B[38;5;196m", // Red
             "\u001B[38;5;202m", // Reddish-Orange
             "\u001B[38;5;208m", // Orange
@@ -67,7 +72,7 @@ public class Board extends ArrayList<ArrayList<Character>> {
                     if (!letterColors.containsKey(letter)) {
                         letterColors.put(letter, (int) letterColors.size() * 26/p);
                     }
-                    System.out.print(rainbowColors[letterColors.get(letter)] + letter + RESET + " "); 
+                    System.out.print(rainbow[letterColors.get(letter)] + letter + RESET + " "); 
                 } else {
                     System.out.print(letter + " ");
                 }
@@ -141,12 +146,13 @@ public class Board extends ArrayList<ArrayList<Character>> {
         // Failed if more pieces than spaces
         if (cases == 0) {
             int num = 0;
-            for (Block block : blocks) {
-                num += block.num;
-            }
+            for (Block block : blocks) num += block.num;
             if (num > n * m) return false;
         }
         
+        // Failed if case has been tried
+        if (failedStates.contains(this.toString())) return false;
+
         // Solved if every piece is placed
         if (blocks.isEmpty()) return true;
         
@@ -161,17 +167,14 @@ public class Board extends ArrayList<ArrayList<Character>> {
                     Block block = blocks.remove(0);
 
                     // Try Every permutation
-                    LinkedHashSet<Block> blockPermutations = block.permuteBlock();
-                    for (Block attemptedBlock : blockPermutations) {
+                    for (Block attemptedBlock : block.permutations) {
                         if (canPlaceBlock(attemptedBlock, i, j)) {
 
                             // Recursion
-                            cases++;
                             placeBlock(attemptedBlock, i, j);
-                            if (solveBoard(blocks)) {
-                                return true;
-                            } 
+                            if (solveBoard(blocks)) return true; 
                             removeBlock(attemptedBlock, i, j);
+                            cases++;
 
                         }
                     }
