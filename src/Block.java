@@ -5,6 +5,8 @@ import java.util.LinkedHashSet;
 public class Block extends ArrayList<ArrayList<Character>> {
     
     char id;
+    int num = 0;
+    LinkedHashSet<Block> permutations = new LinkedHashSet<Block>();
 
     public Block(char id) { 
         super(); 
@@ -15,6 +17,7 @@ public class Block extends ArrayList<ArrayList<Character>> {
         ArrayList<Character> rowList = new ArrayList<>();
         for (char letter : row) {
             rowList.add(letter);
+            if (letter == this.id) num++;
         }
         this.add(rowList);
         this.padBlock();
@@ -80,6 +83,9 @@ public class Block extends ArrayList<ArrayList<Character>> {
         Block paddedBlock = new Block(this.id);
         int maxWidth = width();
         for (ArrayList<Character> row : this) {
+            for (int i = 0; i < row.size(); i++) {
+                if (row.get(i) == ' ') row.set(i, '·');
+            }
             while (row.size() < maxWidth) {
                 row.add('·');
             }
