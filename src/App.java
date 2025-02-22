@@ -6,12 +6,6 @@ import java.util.ArrayList;
 
 public class App {
 
-    // ez print
-    static void print(Object thing) {
-        System.out.println(thing);
-        System.out.println();
-    }
-
     // array of strings into an array of ints
     static int[] toInt(String[] list) {
         int[] intList = new int[list.length];
@@ -84,22 +78,22 @@ public class App {
         }
 
         fileScanner.close();
-        
+
         // Solve Puzzle
         long start = System.nanoTime(); 
         if (board.solveBoard(blocks)) {
             board.displayBoard();
         } else {
-            print("Tidak ada solusi.");
+            System.out.println("Tidak ada solusi.");
         }
         long end = System.nanoTime();
 
         // Print info
-        print("Waktu pencarian: " + (end - start) / 1000000 + " ms");
-        print("Banyak kasus yang ditinjau: " + board.cases);
+        System.out.println("\nWaktu pencarian: " + (end - start) / 1000000 + " ms");
+        System.out.println("\nBanyak kasus yang ditinjau: " + board.cases);
         
         // Write Output into File
-        System.out.print("Apakah anda ingin menyimpan solusi? (ya/tidak) ");
+        System.out.print("\nApakah anda ingin menyimpan solusi? (ya/tidak) ");
         String answer = terminalScanner.nextLine();
         if (answer.equals("ya")) {
             File solution = new File("../test/" + getName(file) + "_Solution.txt");
@@ -114,8 +108,9 @@ public class App {
             solutionWriter.print("\nBanyak kasus yang ditinjau: " + board.cases);
             solutionWriter.close();
         }
-
+        
         // End Program
+        System.out.println();
         terminalScanner.close();
         
     }

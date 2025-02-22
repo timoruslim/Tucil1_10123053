@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class Board extends ArrayList<ArrayList<Character>> {
@@ -160,25 +159,27 @@ public class Board extends ArrayList<ArrayList<Character>> {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
 
-                if (this.get(i).get(j) != '·') continue;
-
                 // Try every piece
                 for (int k = 0; k < blocks.size(); k++) {
-                    Block block = blocks.remove(0);
+                    Block block = blocks.get(k);
 
                     // Try Every permutation
                     for (Block attemptedBlock : block.permutations) {
                         if (canPlaceBlock(attemptedBlock, i, j)) {
 
                             // Recursion
+                            Block successfulBlock = blocks.remove(k);
                             placeBlock(attemptedBlock, i, j);
+
                             if (solveBoard(blocks)) return true; 
-                            removeBlock(attemptedBlock, i, j);
+
+                            removeBlock(attemptedBlock, i, j);  
+                            blocks.add(k, successfulBlock);
+
                             cases++;
 
                         }
                     }
-                    blocks.add(block);
 
                 }
 
