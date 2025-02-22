@@ -1,7 +1,8 @@
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
 public class App {
 
@@ -9,31 +10,6 @@ public class App {
         System.out.println(thing);
         System.out.println();
     }
-
-    static void print(Object[] list) {
-        for (Object thing : list) {
-            System.out.print(thing + " ");
-        }
-        System.out.println();
-    }
-
-    static void print(ArrayList<Block> list) {
-        for (Block b : list) {
-            b.displayBlock();
-            System.out.println();
-        }
-    }
-
-    static void print(LinkedHashSet<Block> list) {
-        for (Block b : list) {
-            b.displayBlock();
-            System.out.println();
-        }
-    }
-
-    static void print() {
-        System.out.println();
-    }   
 
     // array of strings into an array of ints
     static int[] toInt(String[] list) {
@@ -53,14 +29,22 @@ public class App {
         return ' ';
     }
 
+    static String getName(File file) {
+        String name = file.getName();
+        int pos = name.lastIndexOf(".");
+        if (pos > 0) {
+            name = name.substring(0, pos);
+        }
+        return name;
+    }
+    
     public static void main(String[] args) throws Exception {
 
         // Get File
         Scanner terminalScanner = new Scanner(System.in);
-        // System.out.print("Enter file path: ");
-        // String path = terminalScanner.nextLine( );
+        /* System.out.print("Enter file path: ");
+        String path = terminalScanner.nextLine( ); */
         String path = "../test/Problem_1.txt";
-        terminalScanner.close();
 
         // Read file 
         File file = new File(path);
@@ -69,7 +53,7 @@ public class App {
         // Create Board
         int[] dimensions = toInt(fileScanner.nextLine().split(" ")); 
         String type = fileScanner.nextLine();
-        Board board = new Board(dimensions[0], dimensions[1], type);
+        Board board = new Board(dimensions[0], dimensions[1], dimensions[2], type);
 
         // Get the Pieces 
         ArrayList<Block> blocks = new ArrayList<>();
@@ -94,14 +78,37 @@ public class App {
 
         // Solve Puzzle
         long start = System.nanoTime(); 
-        Solution result = board.solveBoard(blocks, 0);
-        if (result.solveable) {
+        if (board.solveBoard(blocks)) {
             board.displayBoard();
         } else {
             print("Tidak ada solusi.");
         }
         long end = System.nanoTime();
+
+        // Print info
         print("Waktu pencarian: " + (end - start) / 1000000 + " ms");
-        print("Banyak kasus yang ditinjau: " + result.iterations);
+        print("Banyak kasus yang ditinjau: " + board.cases);
+        
+        // Write Output into File
+        System.out.print("Apakah anda ingin menyimpan solusi? (ya/tidak) ");
+        String answer = terminalScanner.nextLine();
+        if (answer.equals("ya")) {
+            String solutionPath = "../test/" + file.getName() + "_Solution.txt";
+            File solution = new File(solutionPath);
+            PrintWriter solutionWriter = new PrintWriter(new FileWriter(solution));
+            for (ArrayList<Character> r : board) {
+                for (char c : r) {
+                    solutionWriter.print(c + " ");
+                }
+                solutionWriter.println();
+            }
+            solutionWriter.println("\nWaktu pencarian: " + (end - start) / 1000000 + " ms");
+            solutionWriter.print("\nBanyak kasus yang ditinjau: " + board.cases);
+            solutionWriter.close();
+        }
+        
+        // End Program
+        terminalScanner.close();
+        
     }
 }
