@@ -1,0 +1,8 @@
+A A A A B B B B 
+A C C C C B D D 
+F F E C C G D G 
+F E E E E G G G 
+
+Waktu pencarian: 9748 ms
+
+Banyak kasus yang ditinjau: 3285725

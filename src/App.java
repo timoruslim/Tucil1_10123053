@@ -34,14 +34,15 @@ public class App {
         }
         return name;
     }
-    
+
     public static void main(String[] args) throws Exception {
 
         // Get File
+        System.out.println();
         Scanner terminalScanner = new Scanner(System.in);
         // System.out.print("Enter file path: ");
         // String path = terminalScanner.nextLine( ); 
-        String path = "../test/Problem_1.txt";
+        String path = "../test/Problem_10.txt";
 
         // Read file 
         File file = new File(path);
@@ -50,14 +51,14 @@ public class App {
         // Create Board
         int[] dimensions = toInt(fileScanner.nextLine().split(" ")); 
         String type = fileScanner.nextLine();
-        Board board = new Board(dimensions[0], dimensions[1], dimensions[2], type);
+        Board board = new Board(dimensions[0], dimensions[1], dimensions[2], type, fileScanner);
 
         // Get the Pieces 
         ArrayList<Block> blocks = new ArrayList<>();
         Block block = null;
         
         while (fileScanner.hasNextLine()) {
-            char[] row = fileScanner.nextLine().toCharArray();  
+            char[] row = fileScanner.nextLine().toCharArray(); 
             char letter = findId(row);
 
             if (block == null || block.id != letter) {
@@ -108,7 +109,7 @@ public class App {
             solutionWriter.print("\nBanyak kasus yang ditinjau: " + board.cases);
             solutionWriter.close();
         }
-        
+
         // End Program
         System.out.println();
         terminalScanner.close();

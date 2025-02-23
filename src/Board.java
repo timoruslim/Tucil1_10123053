@@ -2,31 +2,58 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Board extends ArrayList<ArrayList<Character>> {
 
     // Board properties
-    int n, m, p;
+    int n, m, p, cells;
     String type;
 
     // Algorithm stuff
     int cases = 0;
     HashSet<String> failedStates = new HashSet<>();
 
-    public Board(int n, int m, int p, String type) { 
+    // Constructor
+    public Board(int n, int m, int p, String type, Scanner fileScanner) { 
         super(); 
         this.n = n;
         this.m = m;
         this.p = p;
         this.type = type;
+        cells = n * m;
 
-        for (int i = 0; i < n; i++) {
-            ArrayList<Character> row = new ArrayList<>();
-            for (int j = 0; j < m; j++) {
-                row.add('·');
-            }
-            this.add(row);
+        switch(type) {
+            case "DEFAULT":
+                for (int i = 0; i < n; i++) {
+                    ArrayList<Character> row = new ArrayList<>();
+                    for (int j = 0; j < m; j++) {
+                        row.add('·');
+                    }
+                    this.add(row);
+                }
+                break;
+            case "CUSTOM":
+                cells = 0;
+                for (int i = 0; i < n; i++) {
+                    char[] input = fileScanner.nextLine().toCharArray(); 
+                    ArrayList<Character> row = new ArrayList<>();
+                    for (int j = 0; j < m; j++) {
+                        if (input[j] == 'X') {
+                            row.add('·');
+                            cells++;
+                        } else {
+                            row.add(' ');
+                        }
+                    }
+                    this.add(row);
+                }
+                break;
+            case "PYRAMID":
+                System.out.println("Too difficult...");
+            
         }
+        
     }
 
     public void displayBoard() {
@@ -34,42 +61,42 @@ public class Board extends ArrayList<ArrayList<Character>> {
         // Possible 26 Colors
         String RESET = "\u001B[0m";
         String[] rainbow = {
-            "\u001B[38;5;196m", // Red
-            "\u001B[38;5;202m", // Reddish-Orange
-            "\u001B[38;5;208m", // Orange
-            "\u001B[38;5;214m", // Yellow-Orange
-            "\u001B[38;5;220m", // Yellow
-            "\u001B[38;5;226m", // Yellow-Green
-            "\u001B[38;5;190m", // Greenish-Yellow
-            "\u001B[38;5;154m", // Lime Green
-            "\u001B[38;5;118m", // Green
-            "\u001B[38;5;46m",  // Bright Green
-            "\u001B[38;5;47m",  // Cyan-Green
-            "\u001B[38;5;51m",  // Cyan
-            "\u001B[38;5;39m",  // Light Blue-Cyan
-            "\u001B[38;5;33m",  // Sky Blue
-            "\u001B[38;5;27m",  // Blue
-            "\u001B[38;5;21m",  // Deep Blue
-            "\u001B[38;5;57m",  // Indigo
-            "\u001B[38;5;93m",  // Purple-Blue
-            "\u001B[38;5;129m", // Purple
-            "\u001B[38;5;165m", // Magenta-Purple
-            "\u001B[38;5;201m", // Magenta
-            "\u001B[38;5;200m", // Pink-Magenta
-            "\u001B[38;5;206m", // Pink
-            "\u001B[38;5;212m", // Light Pink
-            "\u001B[38;5;218m", // Soft Pink
-            "\u001B[38;5;224m"  // Very Light Pink
+            "\u001B[38;2;255;0;0m", 
+            "\u001B[38;2;255;59;0m",
+            "\u001B[38;2;255;118;0m",
+            "\u001B[38;2;255;177;0m",
+            "\u001B[38;2;255;235;0m",
+            "\u001B[38;2;216;255;0m",
+            "\u001B[38;2;157;255;0m",
+            "\u001B[38;2;98;255;0m",
+            "\u001B[38;2;39;255;0m",
+            "\u001B[38;2;0;255;20m",
+            "\u001B[38;2;0;255;78m",
+            "\u001B[38;2;0;255;137m",
+            "\u001B[38;2;0;255;196m",
+            "\u001B[38;2;0;255;255m",
+            "\u001B[38;2;0;196;255m",
+            "\u001B[38;2;0;137;255m",
+            "\u001B[38;2;0;78;255m",
+            "\u001B[38;2;0;20;255m",
+            "\u001B[38;2;39;0;255m",
+            "\u001B[38;2;98;0;255m",
+            "\u001B[38;2;157;0;255m",
+            "\u001B[38;2;216;0;255m",
+            "\u001B[38;2;255;0;235m",
+            "\u001B[38;2;255;0;177m",
+            "\u001B[38;2;255;0;118m",
+            "\u001B[38;2;255;0;59m" 
         };
         
         // Printing the Board
         Map<Character, Integer> letterColors = new HashMap<>();
         for (ArrayList<Character> row : this) {
             for (char letter : row) {
-                if (letter != '·') {
+                if (letter != '·' && letter != ' ') {
                     // map letter to color
                     if (!letterColors.containsKey(letter)) {
-                        letterColors.put(letter, (int) letterColors.size() * 26/p);
+                        letterColors.put(letter, (int) letterColors.size() * 25/p);
                     }
                     System.out.print(rainbow[letterColors.get(letter)] + letter + RESET + " "); 
                 } else {
@@ -78,7 +105,6 @@ public class Board extends ArrayList<ArrayList<Character>> {
             }
             System.out.println();
         }
-        System.out.println();
 
     }
 
@@ -146,9 +172,9 @@ public class Board extends ArrayList<ArrayList<Character>> {
         if (cases == 0) {
             int num = 0;
             for (Block block : blocks) num += block.num;
-            if (num > n * m) return false;
+            if (num != cells) return false;
         }
-        
+
         // Failed if case has been tried
         if (failedStates.contains(this.toString())) return false;
 
@@ -168,15 +194,15 @@ public class Board extends ArrayList<ArrayList<Character>> {
                         if (canPlaceBlock(attemptedBlock, i, j)) {
 
                             // Recursion
+                            cases++;
+
                             Block successfulBlock = blocks.remove(k);
                             placeBlock(attemptedBlock, i, j);
 
-                            if (solveBoard(blocks)) return true; 
+                            if (solveBoard(blocks)) return true;
 
                             removeBlock(attemptedBlock, i, j);  
                             blocks.add(k, successfulBlock);
-
-                            cases++;
 
                         }
                     }
