@@ -4,7 +4,7 @@ Tugas Kecil 1 untuk mata kuliah Strategi Algoritma (IF2211) berupa IQ Puzzler Pr
 
 ### Struktur Program
 
-Digunakan bahasa Java. Maka, diperlukan compiler Java dengan JDK (Java Development Kit) perlu terinstall. Berikut langkah-langkah untuk menjalankan program.
+Digunakan bahasa Java. Maka, diperlukan compiler Java dengan JDK (Java Development Kit) perlu terinstall. Jika sudah ada, berikut langkah-langkah untuk menjalankan program.
 
 1. Clone repository.
 
@@ -15,7 +15,7 @@ git clone https://github.com/timoruslim/Tucil1_10123053
 2. Navigate to `src` directory.
 
 ```python
-cd src
+cd Tucil1_10123053/src
 ```
 
 3. Compile `App.java`.
@@ -92,4 +92,5 @@ Untuk penjelasan cara kerja algoritma lebih spesifik secara mendalam, dapat dili
 
 ### Authors
 
-Timothy Niels Ruslim (10123053)
+Timothy Niels Ruslim (10123053).
+**Catatan.** Saat ini, saya masih-sit in kelas ini, menunggu apakah bisa melanjutkan saat PRS.

@@ -13,7 +13,7 @@ DDDD
 EEE
 FFF
 FF
-GG
+GGG
 GG
  H
 HHH
