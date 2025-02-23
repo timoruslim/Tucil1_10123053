@@ -5,6 +5,6 @@ F F E D D I
 F H E E G G 
 H H H E G G 
 
-Waktu pencarian: 149 ms
+Waktu pencarian: 143 ms
 
 Banyak kasus yang ditinjau: 23276

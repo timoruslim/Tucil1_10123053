@@ -40,12 +40,29 @@ public class App {
         // Get File
         System.out.println();
         Scanner terminalScanner = new Scanner(System.in);
-        // System.out.print("Enter file path: ");
-        // String path = terminalScanner.nextLine( ); 
-        String path = "../test/Problem_10.txt";
+        File file = null;
+        boolean fileExists = false;
+        while (!fileExists) {
+
+            System.out.print("Masukkan alamat file: ");
+            String path = terminalScanner.nextLine( );
+            File option1 = new File(path);
+            File option2 = new File("../test/" + path);
+
+            if (option1.exists()) {
+                file = option1;
+                fileExists = true;
+            } else if (option2.exists()) {
+                file = option2;
+                fileExists = true;
+            } else {
+                System.out.print("File tidak ditemukan. Coba lagi. ");
+            }
+
+        }
+        System.out.println();
 
         // Read file 
-        File file = new File(path);
         Scanner fileScanner = new Scanner(file);
 
         // Create Board
