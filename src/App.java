@@ -109,7 +109,7 @@ public class App {
         // Print info
         System.out.println("\nWaktu pencarian: " + (end - start) / 1000000 + " ms");
         System.out.println("\nBanyak kasus yang ditinjau: " + board.cases);
-        
+
         // Write Output into File
         System.out.print("\nApakah anda ingin menyimpan solusi? (ya/tidak) ");
         String answer = terminalScanner.nextLine();
@@ -132,4 +132,4 @@ public class App {
         terminalScanner.close();
         
     }
-}
+}   

@@ -4,6 +4,6 @@ E E E D D
 E E F F F 
 G G G F F 
 
-Waktu pencarian: 86 ms
+Waktu pencarian: 74 ms
 
 Banyak kasus yang ditinjau: 17111

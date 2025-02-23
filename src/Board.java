@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -12,7 +11,6 @@ public class Board extends ArrayList<ArrayList<Character>> {
 
     // Algorithm stuff
     int cases = 0;
-    HashSet<String> failedStates = new HashSet<>();
 
     // Constructor
     public Board(int n, int m, int p, String type, Scanner fileScanner) { 
@@ -155,65 +153,51 @@ public class Board extends ArrayList<ArrayList<Character>> {
         return newBoard;
     }
 
-    public boolean isFull() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (this.get(i).get(j) == '·') {
-                    return false;
-                } 
-            }
-        } 
-        return true;
+public boolean solveBoard(ArrayList<Block> blocks) {
+    
+    // Failed if more pieces than spaces
+    if (cases == 0) {
+        int num = 0;
+        for (Block block : blocks) num += block.num;
+        if (num != cells) return false;
     }
 
-    public boolean solveBoard(ArrayList<Block> blocks) {
-        
-        // Failed if more pieces than spaces
-        if (cases == 0) {
-            int num = 0;
-            for (Block block : blocks) num += block.num;
-            if (num != cells) return false;
-        }
+    // Solved if every piece is placed
+    if (blocks.isEmpty()) return true;
+    
+    // Try every position 
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
 
-        // Failed if case has been tried
-        if (failedStates.contains(this.toString())) return false;
+            // Try every piece
+            for (int k = 0; k < blocks.size(); k++) {
+                Block block = blocks.get(k);
 
-        // Solved if every piece is placed
-        if (blocks.isEmpty()) return true;
-        
-        // Try every position 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+                // Try Every permutation
+                for (Block attemptedBlock : block.permutations) {
+                    if (canPlaceBlock(attemptedBlock, i, j)) {
 
-                // Try every piece
-                for (int k = 0; k < blocks.size(); k++) {
-                    Block block = blocks.get(k);
+                        // Recursion
+                        cases++;
 
-                    // Try Every permutation
-                    for (Block attemptedBlock : block.permutations) {
-                        if (canPlaceBlock(attemptedBlock, i, j)) {
+                        Block successfulBlock = blocks.remove(k);
+                        placeBlock(attemptedBlock, i, j);
 
-                            // Recursion
-                            cases++;
+                        if (solveBoard(blocks)) return true;
 
-                            Block successfulBlock = blocks.remove(k);
-                            placeBlock(attemptedBlock, i, j);
+                        removeBlock(attemptedBlock, i, j);  
+                        blocks.add(k, successfulBlock);
 
-                            if (solveBoard(blocks)) return true;
-
-                            removeBlock(attemptedBlock, i, j);  
-                            blocks.add(k, successfulBlock);
-
-                        }
                     }
-
                 }
 
             }
+
         }
-
-        return false;
-
     }
+
+    return false;
+
+}
 
 }

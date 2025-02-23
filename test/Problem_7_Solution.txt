@@ -6,6 +6,6 @@ F F G E E
 D D G H H 
 D D D D H 
 
-Waktu pencarian: 253 ms
+Waktu pencarian: 206 ms
 
 Banyak kasus yang ditinjau: 40465
